@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="210mm" height="297mm" viewBox="0 0 210 297">
+  <defs>
+    <style>
+      .title { font: 700 4.1px "Helvetica Neue", Arial, sans-serif; fill: #111827; letter-spacing: 0.15px; }
+      .section { font: 700 2.7px "Helvetica Neue", Arial, sans-serif; fill: #1f2937; }
+      .label { font: 500 2.35px "Helvetica Neue", Arial, sans-serif; fill: #374151; }
+      .tiny { font: 500 2.0px "Helvetica Neue", Arial, sans-serif; fill: #6b7280; }
+      .line { stroke: #9ca3af; stroke-width: 0.25; }
+      .line-light { stroke: #d1d5db; stroke-width: 0.22; }
+      .box { fill: #ffffff; stroke: #4b5563; stroke-width: 0.5; rx: 2.2; }
+      .checkbox { fill: none; stroke: #6b7280; stroke-width: 0.25; rx: 0.4; }
+      .workband { fill: #eef2f7; }
+      .cutline { stroke: #9ca3af; stroke-width: 0.3; stroke-dasharray: 1.2 1.2; }
+    </style>
+
+    <g id="todo-card">
+      <rect class="box" x="0" y="0" width="94" height="137.5"/>
+
+      <text class="title" x="4.2" y="7">DAILY ENGINEERING TODO</text>
+
+      <text class="label" x="4.2" y="11.6">Date:</text>
+      <line class="line" x1="13.2" y1="11.2" x2="34" y2="11.2"/>
+      <text class="label" x="38" y="11.6">Day:</text>
+      <line class="line" x1="62" y1="11.2" x2="89.6" y2="11.2"/>
+
+      <text class="section" x="4.2" y="17">TODOS</text>
+      <rect class="checkbox" x="4.2" y="19" width="2.6" height="2.6"/>
+      <line class="line" x1="8.2" y1="20.3" x2="89.6" y2="20.3"/>
+      <rect class="checkbox" x="4.2" y="23" width="2.6" height="2.6"/>
+      <line class="line" x1="8.2" y1="24.3" x2="89.6" y2="24.3"/>
+      <rect class="checkbox" x="4.2" y="27" width="2.6" height="2.6"/>
+      <line class="line" x1="8.2" y1="28.3" x2="89.6" y2="28.3"/>
+      <rect class="checkbox" x="4.2" y="31" width="2.6" height="2.6"/>
+      <line class="line" x1="8.2" y1="32.3" x2="89.6" y2="32.3"/>
+      <rect class="checkbox" x="4.2" y="35" width="2.6" height="2.6"/>
+      <line class="line" x1="8.2" y1="36.3" x2="89.6" y2="36.3"/>
+      <rect class="checkbox" x="4.2" y="39" width="2.6" height="2.6"/>
+      <line class="line" x1="8.2" y1="40.3" x2="89.6" y2="40.3"/>
+      <rect class="checkbox" x="4.2" y="43" width="2.6" height="2.6"/>
+      <line class="line" x1="8.2" y1="44.3" x2="89.6" y2="44.3"/>
+      <rect class="checkbox" x="4.2" y="47" width="2.6" height="2.6"/>
+      <line class="line" x1="8.2" y1="48.3" x2="89.6" y2="48.3"/>
+      <rect class="checkbox" x="4.2" y="51" width="2.6" height="2.6"/>
+      <line class="line" x1="8.2" y1="52.3" x2="89.6" y2="52.3"/>
+      <rect class="checkbox" x="4.2" y="55" width="2.6" height="2.6"/>
+      <line class="line" x1="8.2" y1="56.3" x2="89.6" y2="56.3"/>
+      <rect class="checkbox" x="4.2" y="59" width="2.6" height="2.6"/>
+      <line class="line" x1="8.2" y1="60.3" x2="89.6" y2="60.3"/>
+
+      <text class="section" x="4.2" y="65.8">WORK TIMELINE</text>
+      <text class="tiny" x="5" y="78.5">Deep Work</text>
+      <text class="tiny" x="5" y="84.8">Meetings</text>
+      <line class="line" x1="4.2" y1="71.2" x2="89.6" y2="71.2"/>
+      <rect class="workband" x="29.97" y="74.4" width="41.28" height="12.4"/>
+      <rect class="line-light" x="20.8" y="74.4" width="68.8" height="12.4" fill="none"/>
+      <line class="line-light" x1="20.8" y1="80.6" x2="89.6" y2="80.6"/>
+      <line class="line-light" x1="20.8" y1="74.4" x2="20.8" y2="86.8"/>
+      <line class="line-light" x1="25.39" y1="74.4" x2="25.39" y2="86.8"/>
+      <line class="line-light" x1="29.97" y1="74.4" x2="29.97" y2="86.8"/>
+      <line class="line-light" x1="34.56" y1="74.4" x2="34.56" y2="86.8"/>
+      <line class="line-light" x1="39.15" y1="74.4" x2="39.15" y2="86.8"/>
+      <line class="line-light" x1="43.73" y1="74.4" x2="43.73" y2="86.8"/>
+      <line class="line-light" x1="48.32" y1="74.4" x2="48.32" y2="86.8"/>
+      <line class="line-light" x1="52.91" y1="74.4" x2="52.91" y2="86.8"/>
+      <line class="line-light" x1="57.49" y1="74.4" x2="57.49" y2="86.8"/>
+      <line class="line-light" x1="62.08" y1="74.4" x2="62.08" y2="86.8"/>
+      <line class="line-light" x1="66.67" y1="74.4" x2="66.67" y2="86.8"/>
+      <line class="line-light" x1="71.25" y1="74.4" x2="71.25" y2="86.8"/>
+      <line class="line-light" x1="75.84" y1="74.4" x2="75.84" y2="86.8"/>
+      <line class="line-light" x1="80.43" y1="74.4" x2="80.43" y2="86.8"/>
+      <line class="line-light" x1="85.01" y1="74.4" x2="85.01" y2="86.8"/>
+      <line class="line-light" x1="89.6" y1="74.4" x2="89.6" y2="86.8"/>
+      <text class="tiny" x="19.6" y="73.3">7A</text>
+      <text class="tiny" x="28.77" y="73.3">9A</text>
+      <text class="tiny" x="37.95" y="73.3">11A</text>
+      <text class="tiny" x="47.12" y="73.3">1P</text>
+      <text class="tiny" x="56.29" y="73.3">3P</text>
+      <text class="tiny" x="65.47" y="73.3">5P</text>
+      <text class="tiny" x="74.64" y="73.3">7P</text>
+      <text class="tiny" x="83.81" y="73.3">9P</text>
+
+      <text class="section" x="4.2" y="92.2">BLOCKERS</text>
+      <line class="line-light" x1="4.2" y1="94.2" x2="89.6" y2="94.2"/>
+      <line class="line-light" x1="4.2" y1="97.4" x2="89.6" y2="97.4"/>
+      <line class="line-light" x1="4.2" y1="100.6" x2="89.6" y2="100.6"/>
+      <line class="line-light" x1="4.2" y1="103.8" x2="89.6" y2="103.8"/>
+
+      <text class="section" x="4.2" y="108.4">NOTES</text>
+      <line class="line-light" x1="4.2" y1="110.4" x2="89.6" y2="110.4"/>
+      <line class="line-light" x1="4.2" y1="113.6" x2="89.6" y2="113.6"/>
+
+      <text class="label" x="4.2" y="134.3">Done %:</text>
+      <line class="line" x1="13.8" y1="134" x2="25" y2="134"/>
+      <text class="label" x="29" y="134.3">Carry Forward:</text>
+      <line class="line" x1="47.8" y1="134" x2="89.6" y2="134"/>
+    </g>
+  </defs>
+
+  <rect x="0" y="0" width="210" height="297" fill="#ffffff"/>
+  <line class="cutline" x1="105" y1="0" x2="105" y2="297"/>
+  <line class="cutline" x1="0" y1="148.5" x2="210" y2="148.5"/>
+  <use href="#todo-card" x="8" y="8"/>
+  <use href="#todo-card" x="108" y="8"/>
+  <use href="#todo-card" x="8" y="151.5"/>
+  <use href="#todo-card" x="108" y="151.5"/>
+</svg>
