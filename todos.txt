@@ -1,0 +1,16 @@
+# Up to 11 non-empty lines fill the TODOS rows (rest stay blank for handwriting).
+# Lines starting with # are ignored.
+#
+# For multiple printed days (--count > 1 or date range), separate days with a line containing only:
+# ---
+#
+SCP support ticket
+TGW attachment flow logs POC
+Terraform refactoring POC
+Terraform code for dynamic routes
+TSP creation for PROD - Tennable
+TSP creation for PROD - AFT
+CRQ Execution AFT codeconnection setup
+
+
+
