@@ -12,6 +12,8 @@ from dataclasses import dataclass
 from datetime import date, datetime, timedelta
 from pathlib import Path
 
+from gcal_client import TIMELINE_SPAN_HOURS, TimelineSegment
+
 # A4 landscape (mm)
 PAGE_W = 297.0
 PAGE_H = 210.0
@@ -79,7 +81,44 @@ SVG_STYLE = f"""
       .checkbox {{ fill: none; stroke: #6b7280; stroke-width: 0.25; rx: 0.4; }}
       .workband {{ fill: #eef2f7; }}
       .cutline {{ stroke: #9ca3af; stroke-width: 0.3; stroke-dasharray: 1.2 1.2; }}
+      .cal-event {{ fill: #a5b4fc; stroke: #4f46e5; stroke-width: 0.12; rx: 0.35; opacity: 0.9; }}
+      .cal-event-text {{ font: 600 1.4px "Helvetica Neue", Arial, sans-serif; fill: #1e1b4b; }}
 """.strip("\n")
+
+
+def timeline_calendar_svg(
+    segments: list[TimelineSegment],
+    grid_x: float,
+    grid_w: float,
+    grid_y: float,
+    grid_h: float,
+) -> list[str]:
+    """Draw calendar blocks and short titles on the work timeline grid."""
+    out: list[str] = []
+    inset_y = 0.18
+    pad_x = 0.1
+    inner_h = max(grid_h - 2 * inset_y, 0.5)
+    text_y = grid_y + grid_h / 2.0 + 0.5
+    span = float(TIMELINE_SPAN_HOURS)
+    for seg in segments:
+        x0 = grid_x + (seg.start_h / span) * grid_w
+        w = max((seg.end_h - seg.start_h) / span * grid_w, 0.35)
+        x_draw = x0 + pad_x
+        w_draw = max(w - 2 * pad_x, 0.2)
+        out.append(
+            f'    <rect class="cal-event" x="{x_draw:.2f}" y="{grid_y + inset_y:.2f}" '
+            f'width="{w_draw:.2f}" height="{inner_h:.2f}"/>'
+        )
+        if w_draw >= 2.2:
+            max_chars = max(4, min(36, int(w_draw / 0.34)))
+            title = seg.title.strip() or "(event)"
+            if len(title) > max_chars:
+                title = title[: max_chars - 1] + "…"
+            esc = html.escape(title)
+            out.append(
+                f'    <text class="cal-event-text" x="{x_draw + 0.12:.2f}" y="{text_y:.2f}">{esc}</text>'
+            )
+    return out
 
 
 def parse_iso_date(value: str) -> date:
@@ -184,7 +223,14 @@ def load_todo_sections(path: Path) -> list[list[str]]:
     return sections
 
 
-def todo_half_svg(x: float, y: float, dt: date | None, todo_items: list[str], layout: Layout) -> str:
+def todo_half_svg(
+    x: float,
+    y: float,
+    dt: date | None,
+    todo_items: list[str],
+    layout: Layout,
+    timeline_segments: list[TimelineSegment] | None = None,
+) -> str:
     """Original full card: TODOS (11), WORK TIMELINE, BLOCKERS, NOTES, footer."""
     rows = (todo_items + [""] * NUM_TODO_LINES)[:NUM_TODO_LINES]
 
@@ -272,6 +318,9 @@ def todo_half_svg(x: float, y: float, dt: date | None, todo_items: list[str], la
             f'    <line class="line-light" x1="{x_pos:.2f}" y1="{grid_y:.2f}" x2="{x_pos:.2f}" y2="{grid_bottom:.2f}"/>'
         )
 
+    if timeline_segments:
+        lines.extend(timeline_calendar_svg(timeline_segments, grid_x, grid_w, grid_y, grid_h))
+
     for hour in (7, 9, 11, 13, 15, 17, 19, 21):
         suffix = "A" if hour < 12 else "P"
         hour_12 = hour if 1 <= hour <= 12 else hour - 12
@@ -330,9 +379,14 @@ def notes_half_svg(x: float, y: float, dt: date | None, layout: Layout) -> str:
     return "\n".join(lines)
 
 
-def page_svg(dt: date, todo_items: list[str], layout: Layout) -> str:
+def page_svg(
+    dt: date,
+    todo_items: list[str],
+    layout: Layout,
+    timeline_segments: list[TimelineSegment] | None = None,
+) -> str:
     (lx, ly), (rx, ry) = layout.card_positions
-    left = todo_half_svg(lx, ly, dt, todo_items, layout)
+    left = todo_half_svg(lx, ly, dt, todo_items, layout, timeline_segments)
     right = notes_half_svg(rx, ry, dt, layout)
     cut_x = PAGE_MARGIN + layout.card_width + CARD_GAP / 2.0
 
@@ -431,6 +485,28 @@ def main() -> None:
         action="store_true",
         help="After writing SVGs, also write a .pdf next to each file (needs rsvg-convert or inkscape).",
     )
+    parser.add_argument(
+        "--google-calendar",
+        action="store_true",
+        help="Fill WORK TIMELINE from Google Calendar (requires pip install -r requirements-google.txt and OAuth setup; see gcal_client.py).",
+    )
+    parser.add_argument(
+        "--gcal-credentials-dir",
+        type=Path,
+        default=Path.home() / ".config" / "todo-gcal",
+        help="Directory with client_secret.json and token.json. Default: ~/.config/todo-gcal/",
+    )
+    parser.add_argument(
+        "--gcal-calendar-id",
+        default="primary",
+        help="Calendar ID: 'primary' or e.g. workspace email / calendar address from Calendar settings.",
+    )
+    parser.add_argument(
+        "--timezone",
+        default=None,
+        metavar="IANA",
+        help="Timezone for day boundaries (e.g. America/New_York). Default: system local offset.",
+    )
 
     args = parser.parse_args()
     if args.start_date is None:
@@ -455,10 +531,50 @@ def main() -> None:
     args.output_dir.mkdir(parents=True, exist_ok=True)
     layout = Layout()
 
+    calendar_events: list | None = None
+    gcal_tz = None
+    segments_for_print_day = None
+    if args.google_calendar:
+        try:
+            from gcal_client import (
+                fetch_events_range,
+                resolve_timezone,
+                segments_for_print_day as _segments_for_print_day,
+            )
+
+            segments_for_print_day = _segments_for_print_day
+        except ImportError as exc:
+            print(
+                "Google Calendar requires extra packages. Run:\n"
+                "  pip install -r requirements-google.txt",
+                file=sys.stderr,
+            )
+            raise SystemExit(1) from exc
+        try:
+            gcal_tz = resolve_timezone(args.timezone)
+        except ValueError as exc:
+            print(exc, file=sys.stderr)
+            raise SystemExit(1) from exc
+        calendar_events = fetch_events_range(
+            all_dates[0],
+            all_dates[-1],
+            args.gcal_calendar_id,
+            args.gcal_credentials_dir,
+            gcal_tz,
+        )
+        print(
+            f"Loaded {len(calendar_events)} calendar event(s) "
+            f"for {all_dates[0].isoformat()} … {all_dates[-1].isoformat()} (tz: {gcal_tz!s}).",
+            file=sys.stderr,
+        )
+
     written_svg: list[Path] = []
     for i, dt in enumerate(all_dates):
         todo_items = sections[i] if i < len(sections) else []
-        content = page_svg(dt, todo_items, layout)
+        segments: list[TimelineSegment] | None = None
+        if calendar_events is not None and gcal_tz is not None and segments_for_print_day:
+            segments = segments_for_print_day(calendar_events, dt, gcal_tz)
+        content = page_svg(dt, todo_items, layout, segments)
         out = args.output_dir / f"todo-page-{dt.isoformat()}.svg"
         out.write_text(content, encoding="utf-8")
         written_svg.append(out)

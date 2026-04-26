@@ -2,3 +2,7 @@ generated/
 generated-range/
 generated-*/
 out/
+
+# Google OAuth (never commit secrets)
+**/client_secret*.json
+**/token.json
