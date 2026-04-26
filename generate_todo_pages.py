@@ -29,8 +29,28 @@ DEFAULT_OUTPUT_DIR = Path.home() / "Desktop" / "TODO"
 
 NUM_TODO_LINES = 11
 OLD_TODO_LINE_STEP = 5.5
-# Approx max chars per todo row at label font size on A5 half width
-TODO_ROW_MAX_CHARS = 58
+
+# Todo row text (must match .todo-row font-size in SVG_STYLE)
+TODO_ROW_FONT_SIZE_PX = 3.525
+TODO_TEXT_X = 8.5
+CARD_INNER_RIGHT_INSET = 4.2
+# Horizontal mm from text start to before line end; small pad avoids touching the margin
+TODO_ROW_RIGHT_PAD_MM = 0.5
+# Typical advance width / em for bold Latin sans (narrower than naive 1.0; wide glyphs rare in bulk)
+TODO_ROW_AVG_CHAR_EM = 0.56
+
+# Date/Day row (must match .meta-* font sizes in SVG_STYLE)
+META_LABEL_FONT_PX = 3.0
+META_VALUE_FONT_PX = 3.2
+META_ROW_BASELINE = 12.05
+META_LINE_Y = 12.48
+
+# Todo checkboxes: rule y reference per row; text baseline sits above rule; checkbox centered on text
+TODO_LINE_REF_START = 21.05
+TODO_LINE_BASELINE_GAP = 0.55
+TODO_CHECKBOX_H = 2.6
+TODO_ROW_TEXT_CENTER_EM = 0.38
+TODOS_SECTION_Y_REF = 17.6
 
 
 @dataclass(frozen=True)
@@ -45,17 +65,20 @@ class Layout:
     )
 
 
-SVG_STYLE = """
-      .title { font: 700 4.1px "Helvetica Neue", Arial, sans-serif; fill: #111827; letter-spacing: 0.15px; }
-      .section { font: 700 2.7px "Helvetica Neue", Arial, sans-serif; fill: #1f2937; }
-      .label { font: 500 2.35px "Helvetica Neue", Arial, sans-serif; fill: #374151; }
-      .tiny { font: 500 2.0px "Helvetica Neue", Arial, sans-serif; fill: #6b7280; }
-      .line { stroke: #9ca3af; stroke-width: 0.25; }
-      .line-light { stroke: #d1d5db; stroke-width: 0.22; }
-      .box { fill: #ffffff; stroke: #4b5563; stroke-width: 0.5; rx: 2.2; }
-      .checkbox { fill: none; stroke: #6b7280; stroke-width: 0.25; rx: 0.4; }
-      .workband { fill: #eef2f7; }
-      .cutline { stroke: #9ca3af; stroke-width: 0.3; stroke-dasharray: 1.2 1.2; }
+SVG_STYLE = f"""
+      .title {{ font: 700 4.1px "Helvetica Neue", Arial, sans-serif; fill: #111827; letter-spacing: 0.15px; }}
+      .section {{ font: 700 2.7px "Helvetica Neue", Arial, sans-serif; fill: #1f2937; }}
+      .label {{ font: 500 2.35px "Helvetica Neue", Arial, sans-serif; fill: #374151; }}
+      .meta-label {{ font: 600 {META_LABEL_FONT_PX}px "Helvetica Neue", Arial, sans-serif; fill: #374151; }}
+      .meta-value {{ font: 700 {META_VALUE_FONT_PX}px "Helvetica Neue", Arial, sans-serif; fill: #111827; }}
+      .todo-row {{ font: 700 {TODO_ROW_FONT_SIZE_PX}px "Helvetica Neue", Arial, sans-serif; fill: #374151; }}
+      .tiny {{ font: 500 2.0px "Helvetica Neue", Arial, sans-serif; fill: #6b7280; }}
+      .line {{ stroke: #9ca3af; stroke-width: 0.25; }}
+      .line-light {{ stroke: #d1d5db; stroke-width: 0.22; }}
+      .box {{ fill: #ffffff; stroke: #4b5563; stroke-width: 0.5; rx: 2.2; }}
+      .checkbox {{ fill: none; stroke: #6b7280; stroke-width: 0.25; rx: 0.4; }}
+      .workband {{ fill: #eef2f7; }}
+      .cutline {{ stroke: #9ca3af; stroke-width: 0.3; stroke-dasharray: 1.2 1.2; }}
 """.strip("\n")
 
 
@@ -97,11 +120,22 @@ def _card_y(layout: Layout, y_ref: float) -> float:
     return 17.0 + (y_ref - 17.0) * (layout.card_height - 4.0 - 17.0) / (134.0 - 17.0)
 
 
-def truncate_todo_row(text: str) -> str:
+def todo_row_max_chars(layout: Layout) -> int:
+    """Chars that fit between todo text x and inner_right at .todo-row size (viewBox mm)."""
+    inner_right = layout.card_width - CARD_INNER_RIGHT_INSET
+    usable_mm = inner_right - TODO_TEXT_X - TODO_ROW_RIGHT_PAD_MM
+    if usable_mm <= 0:
+        return 24
+    per_char_mm = TODO_ROW_FONT_SIZE_PX * TODO_ROW_AVG_CHAR_EM
+    n = int(usable_mm / per_char_mm)
+    return max(24, min(n, 200))
+
+
+def truncate_todo_row(text: str, max_chars: int) -> str:
     t = text.strip()
-    if len(t) <= TODO_ROW_MAX_CHARS:
+    if len(t) <= max_chars:
         return t
-    return t[: TODO_ROW_MAX_CHARS - 1] + "…"
+    return t[: max_chars - 1] + "…"
 
 
 def load_todo_sections(path: Path) -> list[list[str]]:
@@ -161,6 +195,7 @@ def todo_half_svg(x: float, y: float, dt: date | None, todo_items: list[str], la
 
     cw = layout.card_width
     inner_right = cw - 4.2
+    todo_max_chars = todo_row_max_chars(layout)
 
     date_line_x1 = 13.2
     date_line_x2 = round(min(56.0, cw * 0.40), 2)
@@ -173,31 +208,33 @@ def todo_half_svg(x: float, y: float, dt: date | None, todo_items: list[str], la
         f'  <g transform="translate({x},{y})">',
         f'    <rect class="box" x="0" y="0" width="{cw}" height="{layout.card_height}"/>',
         '    <text class="title" x="4.2" y="7">DAILY ENGINEERING TODO</text>',
-        '    <text class="label" x="4.2" y="11.6">Date:</text>',
-        f'    <line class="line" x1="{date_line_x1}" y1="11.2" x2="{date_line_x2}" y2="11.2"/>',
-        f'    <text class="label" x="13.6" y="10.9">{date_text}</text>',
-        f'    <text class="label" x="{day_label_x}" y="11.6">Day:</text>',
-        f'    <line class="line" x1="{day_line_x1}" y1="11.2" x2="{day_line_x2}" y2="11.2"/>',
-        f'    <text class="label" x="{day_text_x}" y="10.9">{day_text}</text>',
-        '    <text class="section" x="4.2" y="17">TODOS</text>',
+        f'    <text class="meta-label" x="4.2" y="{META_ROW_BASELINE}">Date:</text>',
+        f'    <line class="line" x1="{date_line_x1}" y1="{META_LINE_Y}" x2="{date_line_x2}" y2="{META_LINE_Y}"/>',
+        f'    <text class="meta-value" x="13.6" y="{META_ROW_BASELINE}">{date_text}</text>',
+        f'    <text class="meta-label" x="{day_label_x}" y="{META_ROW_BASELINE}">Day:</text>',
+        f'    <line class="line" x1="{day_line_x1}" y1="{META_LINE_Y}" x2="{day_line_x2}" y2="{META_LINE_Y}"/>',
+        f'    <text class="meta-value" x="{day_text_x}" y="{META_ROW_BASELINE}">{day_text}</text>',
+        f'    <text class="section" x="4.2" y="{_card_y(layout, TODOS_SECTION_Y_REF):.2f}">TODOS</text>',
     ]
 
     for i in range(NUM_TODO_LINES):
-        y_cb = _card_y(layout, 19.0 + i * OLD_TODO_LINE_STEP)
-        y_ln = _card_y(layout, 20.3 + i * OLD_TODO_LINE_STEP)
+        y_ln_ref = TODO_LINE_REF_START + i * OLD_TODO_LINE_STEP
+        y_ln = _card_y(layout, y_ln_ref)
+        y_tx = y_ln - TODO_LINE_BASELINE_GAP
+        text_mid_y = y_tx - TODO_ROW_FONT_SIZE_PX * TODO_ROW_TEXT_CENTER_EM
+        y_cb = text_mid_y - TODO_CHECKBOX_H / 2.0
         lines.extend(
             [
-                f'    <rect class="checkbox" x="4.2" y="{y_cb:.2f}" width="2.6" height="2.6"/>',
+                f'    <rect class="checkbox" x="4.2" y="{y_cb:.2f}" width="{TODO_CHECKBOX_H}" height="{TODO_CHECKBOX_H}"/>',
                 f'    <line class="line" x1="8.2" y1="{y_ln:.2f}" x2="{inner_right}" y2="{y_ln:.2f}"/>',
             ]
         )
         cell = rows[i].strip()
         if cell:
-            y_tx = y_ln - 0.35
-            esc = html.escape(truncate_todo_row(cell))
-            lines.append(f'    <text class="label" x="8.5" y="{y_tx:.2f}">{esc}</text>')
+            esc = html.escape(truncate_todo_row(cell, todo_max_chars))
+            lines.append(f'    <text class="todo-row" x="8.5" y="{y_tx:.2f}">{esc}</text>')
 
-    last_todo_line_ref = 20.3 + (NUM_TODO_LINES - 1) * OLD_TODO_LINE_STEP
+    last_todo_line_ref = TODO_LINE_REF_START + (NUM_TODO_LINES - 1) * OLD_TODO_LINE_STEP
     work_title_ref = last_todo_line_ref + 2.8
     sep_ref = work_title_ref + 3.5
     grid_y_ref = sep_ref + 4.0

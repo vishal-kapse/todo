@@ -5,6 +5,9 @@
       .title { font: 700 4.1px "Helvetica Neue", Arial, sans-serif; fill: #111827; letter-spacing: 0.15px; }
       .section { font: 700 2.7px "Helvetica Neue", Arial, sans-serif; fill: #1f2937; }
       .label { font: 500 2.35px "Helvetica Neue", Arial, sans-serif; fill: #374151; }
+      .meta-label { font: 600 3.0px "Helvetica Neue", Arial, sans-serif; fill: #374151; }
+      .meta-value { font: 700 3.2px "Helvetica Neue", Arial, sans-serif; fill: #111827; }
+      .todo-row { font: 700 3.525px "Helvetica Neue", Arial, sans-serif; fill: #374151; }
       .tiny { font: 500 2.0px "Helvetica Neue", Arial, sans-serif; fill: #6b7280; }
       .line { stroke: #9ca3af; stroke-width: 0.25; }
       .line-light { stroke: #d1d5db; stroke-width: 0.22; }
@@ -18,71 +21,71 @@
   <g transform="translate(5,5)">
     <rect class="box" x="0" y="0" width="139.5" height="200"/>
     <text class="title" x="4.2" y="7">DAILY ENGINEERING TODO</text>
-    <text class="label" x="4.2" y="11.6">Date:</text>
-    <line class="line" x1="13.2" y1="11.2" x2="55.8" y2="11.2"/>
-    <text class="label" x="13.6" y="10.9">YYYY-MM-DD</text>
-    <text class="label" x="58.6" y="11.6">Day:</text>
-    <line class="line" x1="66.8" y1="11.2" x2="84.8" y2="11.2"/>
-    <text class="label" x="67.2" y="10.9">Mon</text>
-    <text class="section" x="4.2" y="17">TODOS</text>
-    <rect class="checkbox" x="4.2" y="20.06" width="2.6" height="2.6"/>
-    <line class="line" x1="8.2" y1="22.05" x2="135.3" y2="22.05"/>
-    <rect class="checkbox" x="4.2" y="28.47" width="2.6" height="2.6"/>
-    <line class="line" x1="8.2" y1="30.46" x2="135.3" y2="30.46"/>
-    <rect class="checkbox" x="4.2" y="36.89" width="2.6" height="2.6"/>
-    <line class="line" x1="8.2" y1="38.88" x2="135.3" y2="38.88"/>
-    <rect class="checkbox" x="4.2" y="45.30" width="2.6" height="2.6"/>
-    <line class="line" x1="8.2" y1="47.29" x2="135.3" y2="47.29"/>
-    <rect class="checkbox" x="4.2" y="53.72" width="2.6" height="2.6"/>
-    <line class="line" x1="8.2" y1="55.71" x2="135.3" y2="55.71"/>
-    <rect class="checkbox" x="4.2" y="62.13" width="2.6" height="2.6"/>
-    <line class="line" x1="8.2" y1="64.12" x2="135.3" y2="64.12"/>
-    <rect class="checkbox" x="4.2" y="70.55" width="2.6" height="2.6"/>
-    <line class="line" x1="8.2" y1="72.54" x2="135.3" y2="72.54"/>
-    <rect class="checkbox" x="4.2" y="78.96" width="2.6" height="2.6"/>
-    <line class="line" x1="8.2" y1="80.95" x2="135.3" y2="80.95"/>
-    <rect class="checkbox" x="4.2" y="87.38" width="2.6" height="2.6"/>
-    <line class="line" x1="8.2" y1="89.36" x2="135.3" y2="89.36"/>
-    <rect class="checkbox" x="4.2" y="95.79" width="2.6" height="2.6"/>
-    <line class="line" x1="8.2" y1="97.78" x2="135.3" y2="97.78"/>
-    <rect class="checkbox" x="4.2" y="104.21" width="2.6" height="2.6"/>
-    <line class="line" x1="8.2" y1="106.19" x2="135.3" y2="106.19"/>
-    <text class="section" x="4.2" y="110.48">WORK TIMELINE</text>
-    <line class="line" x1="4.2" y1="115.83" x2="135.3" y2="115.83"/>
-    <rect class="workband" x="21.68" y="121.95" width="78.66" height="6.8"/>
-    <rect class="line-light" x="4.2" y="121.95" width="131.1" height="6.8" fill="none"/>
-    <line class="line-light" x1="4.20" y1="121.95" x2="4.20" y2="128.75"/>
-    <line class="line-light" x1="12.94" y1="121.95" x2="12.94" y2="128.75"/>
-    <line class="line-light" x1="21.68" y1="121.95" x2="21.68" y2="128.75"/>
-    <line class="line-light" x1="30.42" y1="121.95" x2="30.42" y2="128.75"/>
-    <line class="line-light" x1="39.16" y1="121.95" x2="39.16" y2="128.75"/>
-    <line class="line-light" x1="47.90" y1="121.95" x2="47.90" y2="128.75"/>
-    <line class="line-light" x1="56.64" y1="121.95" x2="56.64" y2="128.75"/>
-    <line class="line-light" x1="65.38" y1="121.95" x2="65.38" y2="128.75"/>
-    <line class="line-light" x1="74.12" y1="121.95" x2="74.12" y2="128.75"/>
-    <line class="line-light" x1="82.86" y1="121.95" x2="82.86" y2="128.75"/>
-    <line class="line-light" x1="91.60" y1="121.95" x2="91.60" y2="128.75"/>
-    <line class="line-light" x1="100.34" y1="121.95" x2="100.34" y2="128.75"/>
-    <line class="line-light" x1="109.08" y1="121.95" x2="109.08" y2="128.75"/>
-    <line class="line-light" x1="117.82" y1="121.95" x2="117.82" y2="128.75"/>
-    <line class="line-light" x1="126.56" y1="121.95" x2="126.56" y2="128.75"/>
-    <line class="line-light" x1="135.30" y1="121.95" x2="135.30" y2="128.75"/>
-    <text class="tiny" x="3.00" y="120.27">7A</text>
-    <text class="tiny" x="20.48" y="120.27">9A</text>
-    <text class="tiny" x="37.96" y="120.27">11A</text>
-    <text class="tiny" x="55.44" y="120.27">1P</text>
-    <text class="tiny" x="72.92" y="120.27">3P</text>
-    <text class="tiny" x="90.40" y="120.27">5P</text>
-    <text class="tiny" x="107.88" y="120.27">7P</text>
-    <text class="tiny" x="125.36" y="120.27">9P</text>
-    <text class="section" x="4.2" y="137.56">BLOCKERS</text>
-    <line class="line-light" x1="4.2" y1="140.62" x2="135.3" y2="140.62"/>
-    <line class="line-light" x1="4.2" y1="145.51" x2="135.3" y2="145.51"/>
-    <line class="line-light" x1="4.2" y1="150.41" x2="135.3" y2="150.41"/>
-    <line class="line-light" x1="4.2" y1="155.30" x2="135.3" y2="155.30"/>
-    <text class="section" x="4.2" y="162.34">NOTES</text>
-    <line class="line-light" x1="4.2" y1="165.40" x2="135.3" y2="165.40"/>
-    <line class="line-light" x1="4.2" y1="170.30" x2="135.3" y2="170.30"/>
+    <text class="meta-label" x="4.2" y="12.05">Date:</text>
+    <line class="line" x1="13.2" y1="12.48" x2="55.8" y2="12.48"/>
+    <text class="meta-value" x="13.6" y="12.05">YYYY-MM-DD</text>
+    <text class="meta-label" x="58.6" y="12.05">Day:</text>
+    <line class="line" x1="66.8" y1="12.48" x2="84.8" y2="12.48"/>
+    <text class="meta-value" x="67.2" y="12.05">Mon</text>
+    <text class="section" x="4.2" y="17.92">TODOS</text>
+    <rect class="checkbox" x="4.2" y="20.01" width="2.6" height="2.6"/>
+    <line class="line" x1="8.2" y1="23.2" x2="135.3" y2="23.2"/>
+    <rect class="checkbox" x="4.2" y="28.42" width="2.6" height="2.6"/>
+    <line class="line" x1="8.2" y1="31.61" x2="135.3" y2="31.61"/>
+    <rect class="checkbox" x="4.2" y="36.84" width="2.6" height="2.6"/>
+    <line class="line" x1="8.2" y1="40.03" x2="135.3" y2="40.03"/>
+    <rect class="checkbox" x="4.2" y="45.25" width="2.6" height="2.6"/>
+    <line class="line" x1="8.2" y1="48.44" x2="135.3" y2="48.44"/>
+    <rect class="checkbox" x="4.2" y="53.66" width="2.6" height="2.6"/>
+    <line class="line" x1="8.2" y1="56.85" x2="135.3" y2="56.85"/>
+    <rect class="checkbox" x="4.2" y="62.08" width="2.6" height="2.6"/>
+    <line class="line" x1="8.2" y1="65.27" x2="135.3" y2="65.27"/>
+    <rect class="checkbox" x="4.2" y="70.49" width="2.6" height="2.6"/>
+    <line class="line" x1="8.2" y1="73.68" x2="135.3" y2="73.68"/>
+    <rect class="checkbox" x="4.2" y="78.91" width="2.6" height="2.6"/>
+    <line class="line" x1="8.2" y1="82.1" x2="135.3" y2="82.1"/>
+    <rect class="checkbox" x="4.2" y="87.32" width="2.6" height="2.6"/>
+    <line class="line" x1="8.2" y1="90.51" x2="135.3" y2="90.51"/>
+    <rect class="checkbox" x="4.2" y="95.74" width="2.6" height="2.6"/>
+    <line class="line" x1="8.2" y1="98.93" x2="135.3" y2="98.93"/>
+    <rect class="checkbox" x="4.2" y="104.15" width="2.6" height="2.6"/>
+    <line class="line" x1="8.2" y1="107.34" x2="135.3" y2="107.34"/>
+    <text class="section" x="4.2" y="111.63">WORK TIMELINE</text>
+    <line class="line" x1="4.2" y1="116.98" x2="135.3" y2="116.98"/>
+    <rect class="workband" x="21.68" y="123.1" width="78.66" height="6.8"/>
+    <rect class="line-light" x="4.2" y="123.1" width="131.1" height="6.8" fill="none"/>
+    <line class="line-light" x1="4.20" y1="123.1" x2="4.20" y2="129.9"/>
+    <line class="line-light" x1="12.94" y1="123.1" x2="12.94" y2="129.9"/>
+    <line class="line-light" x1="21.68" y1="123.1" x2="21.68" y2="129.9"/>
+    <line class="line-light" x1="30.42" y1="123.1" x2="30.42" y2="129.9"/>
+    <line class="line-light" x1="39.16" y1="123.1" x2="39.16" y2="129.9"/>
+    <line class="line-light" x1="47.90" y1="123.1" x2="47.90" y2="129.9"/>
+    <line class="line-light" x1="56.64" y1="123.1" x2="56.64" y2="129.9"/>
+    <line class="line-light" x1="65.38" y1="123.1" x2="65.38" y2="129.9"/>
+    <line class="line-light" x1="74.12" y1="123.1" x2="74.12" y2="129.9"/>
+    <line class="line-light" x1="82.86" y1="123.1" x2="82.86" y2="129.9"/>
+    <line class="line-light" x1="91.60" y1="123.1" x2="91.60" y2="129.9"/>
+    <line class="line-light" x1="100.34" y1="123.1" x2="100.34" y2="129.9"/>
+    <line class="line-light" x1="109.08" y1="123.1" x2="109.08" y2="129.9"/>
+    <line class="line-light" x1="117.82" y1="123.1" x2="117.82" y2="129.9"/>
+    <line class="line-light" x1="126.56" y1="123.1" x2="126.56" y2="129.9"/>
+    <line class="line-light" x1="135.30" y1="123.1" x2="135.30" y2="129.9"/>
+    <text class="tiny" x="3.00" y="121.42">7A</text>
+    <text class="tiny" x="20.48" y="121.42">9A</text>
+    <text class="tiny" x="37.96" y="121.42">11A</text>
+    <text class="tiny" x="55.44" y="121.42">1P</text>
+    <text class="tiny" x="72.92" y="121.42">3P</text>
+    <text class="tiny" x="90.40" y="121.42">5P</text>
+    <text class="tiny" x="107.88" y="121.42">7P</text>
+    <text class="tiny" x="125.36" y="121.42">9P</text>
+    <text class="section" x="4.2" y="138.7">BLOCKERS</text>
+    <line class="line-light" x1="4.2" y1="141.76" x2="135.3" y2="141.76"/>
+    <line class="line-light" x1="4.2" y1="146.66" x2="135.3" y2="146.66"/>
+    <line class="line-light" x1="4.2" y1="151.56" x2="135.3" y2="151.56"/>
+    <line class="line-light" x1="4.2" y1="156.45" x2="135.3" y2="156.45"/>
+    <text class="section" x="4.2" y="163.49">NOTES</text>
+    <line class="line-light" x1="4.2" y1="166.55" x2="135.3" y2="166.55"/>
+    <line class="line-light" x1="4.2" y1="171.44" x2="135.3" y2="171.44"/>
     <text class="label" x="4.2" y="196.46">Done %:</text>
     <line class="line" x1="13.8" y1="196.00" x2="25" y2="196.00"/>
     <text class="label" x="29" y="196.46">Carry Forward:</text>
