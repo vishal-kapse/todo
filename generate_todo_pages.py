@@ -455,7 +455,12 @@ def main() -> None:
         "--start-date",
         type=parse_iso_date,
         default=None,
-        help="First page date (YYYY-MM-DD). Default: tomorrow",
+        help="First page date (YYYY-MM-DD). Default: tomorrow. Incompatible with --today.",
+    )
+    parser.add_argument(
+        "--today",
+        action="store_true",
+        help="First page date is today (instead of default tomorrow). Incompatible with --start-date.",
     )
     parser.add_argument(
         "--end-date",
@@ -509,7 +514,11 @@ def main() -> None:
     )
 
     args = parser.parse_args()
-    if args.start_date is None:
+    if args.today and args.start_date is not None:
+        parser.error("Use either --today or --start-date, not both.")
+    if args.today:
+        args.start_date = date.today()
+    elif args.start_date is None:
         args.start_date = tomorrow
     if args.count < 1:
         raise ValueError("--count must be >= 1")

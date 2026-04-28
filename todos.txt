@@ -4,13 +4,15 @@
 # For multiple printed days (--count > 1 or date range), separate days with a line containing only:
 # ---
 #
-TGW attachment flow logs POC
-Terraform refactoring POC
+AFT demo doc
+AFT all pipeline triggers update
+TGW attachment flow logs POC - Waiting for feedback
+Terraform refactoring POC - Dependency
 Terraform code for dynamic routes
-TSP creation for PROD - Tennable
 TSP creation for PROD - AFT
-GIC certification
-AFT fix account-request dynamodb endpoint issue
-Tennable API poc and tests
-
-
+Crowdstrike API poc and tests
+Component for tennable to run scan - PR
+Component for Crowdstrike to run scan - PR
+PR for CrowdStrike component and test
+Network automation
+CrowdStrike Meeting with Lucky
