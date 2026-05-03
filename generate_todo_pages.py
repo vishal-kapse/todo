@@ -5,6 +5,7 @@ from __future__ import annotations
 
 import argparse
 import html
+import re
 import shutil
 import subprocess
 import sys
@@ -53,6 +54,21 @@ TODO_LINE_BASELINE_GAP = 0.55
 TODO_CHECKBOX_H = 2.6
 TODO_ROW_TEXT_CENTER_EM = 0.38
 TODOS_SECTION_Y_REF = 17.6
+
+# Todo line suffix " #X" at end-of-line → text color X (shown text omits suffix). Readable on white.
+# Use [-] disambiguated class + IGNORECASE — a class like "[Roy]" is parsed as range R–o (excludes ASCII "O").
+_TODO_COLOR_TAG_RE = re.compile(r"\s*#([ROYGBVPC])\s*$", re.IGNORECASE)
+
+TODO_COLOR_FILL: dict[str, str] = {
+    "R": "#dc2626",  # red
+    "O": "#ea580c",  # orange
+    "Y": "#ca8a04",  # yellow/amber (strong enough for paper)
+    "G": "#16a34a",  # green
+    "B": "#2563eb",  # blue
+    "V": "#7c3aed",  # violet
+    "P": "#a855f7",  # purple
+    "C": "#0891b2",  # cyan
+}
 
 
 @dataclass(frozen=True)
@@ -177,12 +193,34 @@ def truncate_todo_row(text: str, max_chars: int) -> str:
     return t[: max_chars - 1] + "…"
 
 
+def parse_todo_color_tag(raw_line: str) -> tuple[str, str | None]:
+    """
+    Strip a trailing ``#Letter`` color tag (optional space before ``#``).
+
+    Letters: R O Y G B V P C (case-insensitive).
+    Returns (visible_text, svg_fill_hex or None default stroke color).
+    """
+    s = raw_line.strip()
+    m = _TODO_COLOR_TAG_RE.search(s)
+    if not m:
+        return s, None
+    code = m.group(1).upper()
+    fill = TODO_COLOR_FILL.get(code)
+    visible = s[: m.start()].rstrip()
+    if not fill or not visible:
+        return s, None
+    return visible, fill
+
+
 def load_todo_sections(path: Path) -> list[list[str]]:
     """
     Load up to 11 todo lines per day.
 
     If the file contains a line that is exactly ``---``, the file is split into blocks (one per day).
     Empty blocks are skipped. With no ``---``, the first 11 non-comment lines apply to a single day.
+
+    Todo coloring: append `` #R`` / `` #O`` / … to a line end (after a space): R red, O orange,
+    Y yellow, G green, B blue, V violet, P purple, C cyan. The suffix is stripped in the SVG.
     """
     if not path.exists():
         return []
@@ -277,8 +315,16 @@ def todo_half_svg(
         )
         cell = rows[i].strip()
         if cell:
-            esc = html.escape(truncate_todo_row(cell, todo_max_chars))
-            lines.append(f'    <text class="todo-row" x="8.5" y="{y_tx:.2f}">{esc}</text>')
+            visible, todo_fill = parse_todo_color_tag(cell)
+            esc = html.escape(truncate_todo_row(visible, todo_max_chars))
+            if todo_fill:
+                # Inline style wins over .todo-row { fill: ... } in rsvg-convert/librsvg; plain fill="" does not.
+                lines.append(
+                    f'    <text class="todo-row" style="fill:{todo_fill}" '
+                    f'x="8.5" y="{y_tx:.2f}">{esc}</text>'
+                )
+            else:
+                lines.append(f'    <text class="todo-row" x="8.5" y="{y_tx:.2f}">{esc}</text>')
 
     last_todo_line_ref = TODO_LINE_REF_START + (NUM_TODO_LINES - 1) * OLD_TODO_LINE_STEP
     work_title_ref = last_todo_line_ref + 2.8

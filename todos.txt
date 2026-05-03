@@ -1,18 +1,20 @@
 # Up to 11 non-empty lines fill the TODOS rows (rest stay blank for handwriting).
 # Lines starting with # are ignored.
 #
+# Todo color suffix (stripped when printing): append space + #letter at end —
+# #R red #O orange #Y yellow #G green #B blue #V violet #P purple #C cyan
+# Example: Deploy pipeline #R
 # For multiple printed days (--count > 1 or date range), separate days with a line containing only:
 # ---
 #
-AFT demo doc
-AFT all pipeline triggers update
+AFT Fix account create pipeline
 TGW attachment flow logs POC - Waiting for feedback
-Terraform refactoring POC - Dependency
-Terraform code for dynamic routes
-TSP creation for PROD - AFT
+Terraform refactoring Presentation
+Terraform code for dynamic routes #O
+TSP creation for PROD - AFT #O
 Crowdstrike API poc and tests
-Component for tennable to run scan - PR
+Component for tennable to run scan RHEL - PR #O
+Component for tennable to run scan Windows - PR #O
 Component for Crowdstrike to run scan - PR
 PR for CrowdStrike component and test
 Network automation
-CrowdStrike Meeting with Lucky
